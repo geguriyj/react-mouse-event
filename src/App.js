@@ -11,11 +11,17 @@ class App extends Component {
     // this._img.src = "https://unsplash.it/100/100";
     // this._img.width = 100;
     // this._img.height = 100;
+
+    this.state = {
+        ghostPosX: -1000,
+        ghostPosY: -1000
+    };
   }
 
   render() {
 
     const draggable = this._isDraggable();
+    const ghostStyle = this._ghostStyle();
 
     return (
       <div className="App"
@@ -28,7 +34,7 @@ class App extends Component {
         onDragEnd={ this.handleDragEnd }
         >
         <div className="App-header">
-          <div id="drag" className="drag"></div>
+          <div id="drag" className="drag" style={ ghostStyle }></div>
           <img src="https://images.unsplash.com/photo-1428550443830-190057dc8098?dpr=1&auto=compress,format&fit=crop&w=767&h=511&q=80&cs=tinysrgb&crop="
             alt="unsplash-1"
             draggable={ draggable }
@@ -50,6 +56,16 @@ class App extends Component {
       // console.log("isDraggable ", isDraggable);
 
       return isDraggable;
+  }
+
+  _ghostStyle() {
+      const ghostPosX = this.state.ghostPosX;
+      const ghostPosY = this.state.ghostPosY;
+
+      return Object.assign({}, {
+          "left": ghostPosX + "px",
+          "top": ghostPosY + "px"
+      })
   }
 
   _defineMouseEvent() {
@@ -85,9 +101,13 @@ class App extends Component {
   }
 
   handleMouseMove(e) {
-      const drag = document.getElementById("drag");
-      drag.style.top = Math.round(e.pageY) + "px";
-      drag.style.left = Math.round(e.pageX) + "px";
+      // const drag = document.getElementById("drag");
+      // drag.style.top = Math.round(e.pageY) + "px";
+      // drag.style.left = Math.round(e.pageX) + "px";
+      this.setState({
+          "ghostPosX": Math.round(e.pageX),
+          "ghostPosY": Math.round(e.pageY)
+      });
   }
 
   handleMouseUp(e) {
